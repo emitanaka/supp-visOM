@@ -1,5 +1,6 @@
 ---
 title: "Supplementary material for \"Uprooting sub-standard visualisation practices for decision-making in operational management\""
+bibliography: references.bib 
 output:
   bookdown::html_document2:
     code_folding: "hide"
@@ -58,7 +59,7 @@ df_miss <- df_full %>%
   filter(!is.na(readmission_rate))
 ```
 
-(ref:mimicary) This figure recreates Figure 3 in Basole et al.
+(ref:mimicary) This figure recreates Figure 3 in @basole2021.
 
 ```{r mimic-original, fig.height = 8, fig.width = 18, fig.cap = "(ref:mimicary)"}
 g1 <- ggplot(df_miss, aes(col, row)) +
@@ -150,12 +151,13 @@ ggplot(lineup_data, aes(coverage_obscured * 100, colorectal_cancer_screenings)) 
 
 # Acknowledgement 
 
-We thank the Basole et al. for supplying us the synthetic data to draw the above plots. 
+We thank @basole2021 for supplying us the synthetic data to draw the above plots. 
 
-# Session Information
+# Reference
 
-
+<details>
+<summary>Session Information</summary>
 ```{r session-info}
 sessioninfo::session_info()
 ```
-
+</details>
