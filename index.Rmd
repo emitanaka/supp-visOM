@@ -116,7 +116,7 @@ lineup_data <- null_permute("colorectal_cancer_screenings") %>%
 (ref:lineup-theirs) The lineup for the tile grid plot.
 
 ```{r lineup-theirs, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-theirs)"}
-ggplot(lineup_data, aes(col, row)) +
+plot_lineup_theirs <- ggplot(lineup_data, aes(col, row)) +
   geom_point(aes(size = coverage_obscured, color = colorectal_cancer_screenings), alpha = 0.8) +
   theme_void() + 
   scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#E7D9C6") +
@@ -128,12 +128,14 @@ ggplot(lineup_data, aes(col, row)) +
   theme(legend.position = "bottom",
         strip.text = element_text(size = 18, margin = margin(t = 3, b = 3)),
         strip.background = element_rect(color = "black", size = 1.5))
+
+plot_lineup_theirs
 ```
 
 (ref:lineup-ours) The lineup for the scatter plot.
 
 ```{r lineup-ours, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-ours)"}
-ggplot(lineup_data, aes(coverage_obscured * 100, colorectal_cancer_screenings)) +
+plot_lineup_ours <- ggplot(lineup_data, aes(coverage_obscured * 100, colorectal_cancer_screenings)) +
   geom_point() +  
   geom_smooth(method = loess, formula = y ~ x) +
   facet_wrap(~.sample, ncol = 5) +
@@ -145,8 +147,43 @@ ggplot(lineup_data, aes(coverage_obscured * 100, colorectal_cancer_screenings)) 
         axis.title = element_blank(),
         axis.line = element_blank(),
         axis.ticks.length = unit(0, "pt"))
+
+plot_lineup_ours
 ```
 
+
+(ref:lineup-demo) Due to lack of space, only 
+
+```{r lineup-demo, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-demo)"}
+plot_lineup_theirs %+% filter(lineup_data, .sample %in% 1:4) +
+  facet_wrap(~.sample, ncol = 2) +
+  scale_size(range = c(3, 15)) 
+```
+
+# Same plots with higher associations between variables
+
+The following are plots based on data that purposely modifies cancer screening to induce a higher association with the coverage. 
+
+```{r data-false}
+df_false <- df_miss %>% 
+  arrange(coverage_obscured) %>% 
+  mutate(colorectal_cancer_screenings = sort(colorectal_cancer_screenings))
+
+lineup_false_data <- null_permute("colorectal_cancer_screenings") %>% 
+  lineup(true = df_false, n = 20, pos = 5)
+```
+
+(ref:lineup-theirs-false) Which plot looks the most strikingly different to you?
+
+```{r lineup-theirs-false, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-theirs-false)"}
+plot_lineup_theirs %+% lineup_false_data
+```
+
+(ref:lineup-ours-false) The above shows a lineup for data that was purposely manipulated so that two variables have a higher association. How easy was it to spot the data plot compared to Figure \@ref(fig:lineup-theirs-false)?
+
+```{r lineup-ours-false, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-ours-false)"}
+plot_lineup_ours %+% lineup_false_data
+```
 
 
 # Acknowledgement 
