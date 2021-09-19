@@ -152,13 +152,6 @@ plot_lineup_ours
 ```
 
 
-(ref:lineup-demo) Due to lack of space, only 
-
-```{r lineup-demo, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-demo)"}
-plot_lineup_theirs %+% filter(lineup_data, .sample %in% 1:4) +
-  facet_wrap(~.sample, ncol = 2) +
-  scale_size(range = c(3, 15)) 
-```
 
 # Same plots with higher associations between variables
 
