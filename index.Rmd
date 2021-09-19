@@ -117,17 +117,18 @@ g1 + g2 + plot_layout(guides = "collect")
 
 ```{r fig3-alt, fig.height = 4, fig.width = 8, fig.cap = "(ref:fig3-alt)"}
 theme_set(theme_classic())
-g1 <- ggplot(df_miss, aes(coverage_obscured * 100, colorectal_cancer_screenings)) +
+g1 <- ggplot(df_miss, aes(coverage_obscured * 100, readmission_rate * 100)) +
+  geom_point() +
+  labs(x = "Coverage (%)", y = "Readmission (%)") +
+  geom_smooth(method = loess, formula = y ~ x) +
+  annotate("richtext", x = 80, y = 15.3, label.color = NA, fill = "transparent", label = glue::glue("R<sup>2</sup> = {scales::comma(cor(df_miss$coverage_obscured, df_miss$readmission_rate), 0.001)}")) 
+
+g2 <- ggplot(df_miss, aes(coverage_obscured * 100, colorectal_cancer_screenings)) +
   geom_point() +
   labs(x = "Coverage (%)", y = "Cancer Screening (%)") +
   geom_smooth(method = loess, formula = y ~ x) +
   annotate("richtext", x = 80, y = 73, label.color = NA, fill = "transparent", label = glue::glue("R<sup>2</sup> = {scales::comma(cor(df_miss$coverage_obscured, df_miss$colorectal_cancer_screenings), 0.001)}")) 
 
-g2 <- ggplot(df_miss, aes(coverage_obscured * 100, readmission_rate * 100)) +
-  geom_point() +
-  labs(x = "Coverage (%)", y = "Readmission (%)") +
-  geom_smooth(method = loess, formula = y ~ x) +
-  annotate("richtext", x = 80, y = 15.3, label.color = NA, fill = "transparent", label = glue::glue("R<sup>2</sup> = {scales::comma(cor(df_miss$coverage_obscured, df_miss$readmission_rate), 0.001)}")) 
 
 g1 + g2 
 ```
@@ -202,6 +203,15 @@ plot_lineup_theirs %+% lineup_false_data
 ```{r lineup-ours-false, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-ours-false)"}
 plot_lineup_ours %+% lineup_false_data
 ```
+
+# Positions of the data plot
+
+The positions of the data plot for the lineup are as follows:
+
+* [Figure S3](#fig:lineup-theirs): position 3. 
+* [Figure S4](#fig:lineup-ours): position 3. 
+* [Figure S5](#fig:lineup-theirs-false): position 5. 
+* [Figure S6](#fig:lineup-ours-false): position 5. 
 
 
 # Acknowledgement 
