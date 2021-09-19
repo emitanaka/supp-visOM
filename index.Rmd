@@ -1,5 +1,15 @@
 ---
 title: "Supplementary material for \"Uprooting sub-standard visualisation practices for decision-making in operational management\""
+author:
+  - name: Emi Tanaka
+    affiliation: Department of Econometrics and Business Statistics, Monash University, Melbourne, VIC 3800
+    email: emi.tanaka@monash.edu
+  - name: Jessica Wai Yin Leung
+    affiliation: Department of Econometrics and Business Statistics, Monash University, Melbourne, VIC 3800
+    email: jessica.leung@monash.edu
+  - name: Dianne Cook
+    affiliation: Department of Econometrics and Business Statistics, Monash University, Melbourne, VIC 3800
+    email: dicook@monash.edu
 bibliography: references.bib 
 output:
   bookdown::html_document2:
@@ -9,9 +19,21 @@ output:
     number_sections: false
 ---
 
-To see the code, click on the CODE button. You can also download the whole R Markdown file from the drop down menu on the top right corner. 
+This is the supplementary material to an invited commentary for @basole2021. We provide all code that are used to generate the figures in the commentary in addition to other supplementary figures (and its code). To see the code, click on the CODE button. You can also download the whole R Markdown file from the drop down menu on the top right corner.
 
-```{r setup, message = FALSE, warning = FALSE}
+
+**List of figures** 
+
+* [Figure S1](#fig:mimic-original): Recreating Figure 3 of @basole2021 using `ggplot2`. 
+* [Figure S2](#fig:fig3-alt): An alternative design to Figure 3 of @basole2021.
+* [Figure S3](#fig:lineup-theirs) Lineup for the tile grid plot used in Figure 3 of @basole2021.
+* [Figure S4](#fig:lineup-ours) Lineup for the scatter plot. 
+* [Figure S5](#fig:lineup-theirs-false) Lineup for the tile grid plot on data with purposely high association.
+* [Figure S6](#fig:lineup-ours-false) Lineup for the scatter plot on data with purposely high association.
+
+<details>
+<summary>Code to load library and data</summary>
+```{r setup, message = FALSE, warning = FALSE, class.source = 'fold-show'}
 library(tidyverse)
 library(ggtext)
 library(patchwork)
@@ -22,11 +44,13 @@ library(janitor)
 library(scales)
 #theme_set(theme_classic())
 knitr::opts_chunk$set(fig.path = "images/",
-                      dev = c("png", "pdf", "svg"))
+                      dev = c("png", "pdf", "svg"),
+                      cache = TRUE,
+                      cache.path = "cache/")
 ```
 
 
-```{r data}
+```{r data, class.source = 'fold-show'}
 df_full <- read_xlsx(here("data/MaskedCoverage-Fig3.xlsx")) %>% 
   clean_names() %>% 
   add_row(state = c("OR", "WY", "SD", "WV", "DC", "AL")) %>% 
@@ -58,6 +82,7 @@ df_full <- read_xlsx(here("data/MaskedCoverage-Fig3.xlsx")) %>%
 df_miss <- df_full %>% 
   filter(!is.na(readmission_rate))
 ```
+</details>
 
 (ref:mimicary) This figure recreates Figure 3 in @basole2021.
 
@@ -88,7 +113,7 @@ g2 <- ggplot(df_miss, aes(col, row)) +
 g1 + g2 + plot_layout(guides = "collect") 
 ```
 
-(ref:fig3-alt) This is an alternative graph design for Figure \@ref(fig:mimic-original).
+(ref:fig3-alt) This is an alternative graph design for [Figure S1](#fig:mimic-original).
 
 ```{r fig3-alt, fig.height = 4, fig.width = 8, fig.cap = "(ref:fig3-alt)"}
 theme_set(theme_classic())
@@ -155,9 +180,9 @@ plot_lineup_ours
 
 # Same plots with higher associations between variables
 
-The following are plots based on data that purposely modifies cancer screening to induce a higher association with the coverage. 
+The following are plots based on data that purposely modifies cancer screening to induce a higher association with the coverage. This higher association is induced (as shown in the code below) by rearranging data by the coverage and modifying the cancer screening percentage so that it is ordered from low to high. 
 
-```{r data-false}
+```{r data-false, class.source="fold-show"}
 df_false <- df_miss %>% 
   arrange(coverage_obscured) %>% 
   mutate(colorectal_cancer_screenings = sort(colorectal_cancer_screenings))
@@ -172,7 +197,7 @@ lineup_false_data <- null_permute("colorectal_cancer_screenings") %>%
 plot_lineup_theirs %+% lineup_false_data
 ```
 
-(ref:lineup-ours-false) The above shows a lineup for data that was purposely manipulated so that two variables have a higher association. How easy was it to spot the data plot compared to Figure \@ref(fig:lineup-theirs-false)?
+(ref:lineup-ours-false) The above shows a lineup for data that was purposely manipulated so that two variables have a higher association. How easy was it to spot the data plot compared to [Figure S5](#fig:lineup-theirs-false)?
 
 ```{r lineup-ours-false, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-ours-false)"}
 plot_lineup_ours %+% lineup_false_data
@@ -191,3 +216,6 @@ We thank @basole2021 for supplying us the synthetic data to draw the above plots
 sessioninfo::session_info()
 ```
 </details>
+
+  
+<br>
