@@ -26,10 +26,10 @@ This is the supplementary material to an invited commentary for @basole2021. We 
 
 * [Figure S1](#fig:mimic-original): Recreating Figure 3 of @basole2021 using `ggplot2`. 
 * [Figure S2](#fig:fig3-alt): An alternative design to Figure 3 of @basole2021.
-* [Figure S3](#fig:lineup-theirs) Lineup for the tile grid plot used in Figure 3 of @basole2021.
-* [Figure S4](#fig:lineup-ours) Lineup for the scatter plot. 
-* [Figure S5](#fig:lineup-theirs-false) Lineup for the tile grid plot on data with purposely high association.
-* [Figure S6](#fig:lineup-ours-false) Lineup for the scatter plot on data with purposely high association.
+* [Figure S3](#fig:lineup-theirs): Lineup for the tile grid plot used in Figure 3 of @basole2021.
+* [Figure S4](#fig:lineup-ours): Lineup for the scatter plot. 
+* [Figure S5](#fig:lineup-theirs-false): Lineup for the tile grid plot on data with purposely high association.
+* [Figure S6](#fig:lineup-ours-false): Lineup for the scatter plot on data with purposely high association.
 
 <details>
 <summary>Code to load library and data</summary>
