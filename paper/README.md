@@ -1,1 +1,3 @@
-This folder contains the main paper.
+# Uprooting sub-standard visualisation practices for decision-making in operational management
+
+This folder contains source files to build the main paper. 
