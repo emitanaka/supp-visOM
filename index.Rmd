@@ -19,8 +19,15 @@ output:
     number_sections: false
 ---
 
-This is the supplementary material to an invited commentary for @basole2021. We provide all code that are used to generate the figures in the commentary in addition to other supplementary figures (and its code). To see the code, click on the CODE button. You can also download the whole R Markdown file from the drop down menu on the top right corner.
 
+This is the supplementary material to an invited commentary for @basole2021. We provide all code that are used to generate the figures in the commentary in addition to other supplementary figures (and its code). 
+
+
+<ul class="fa-ul">
+  <li><span class="fa-li"><i class="fas fa-code"></i></span> To see the code, click on the CODE button. </li>
+  <li><span class="fa-li"><i class="fas fa-download"></i></span> You can also download the whole R Markdown file from the drop down menu on the top right corner.</li>
+  <li><span class="fa-li"><i class="fab fa-github"></i></span> The GitHub repo for this material can be found at https://github.com/emitanaka/supp-visOM. </li>
+</ul>
 
 **List of figures** 
 
@@ -42,12 +49,18 @@ library(nullabor)
 library(here)
 library(janitor)
 library(scales)
-#theme_set(theme_classic())
+```
+
+```{r knitr-setup, include = FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 knitr::opts_chunk$set(fig.path = "images/",
                       dev = c("png", "pdf", "svg"),
                       cache = TRUE,
-                      cache.path = "cache/")
+                      cache.path = "cache/",
+                      message = FALSE,
+                      warning = FALSE)
 ```
+
 
 
 ```{r data, class.source = 'fold-show'}
@@ -84,7 +97,7 @@ df_miss <- df_full %>%
 ```
 </details>
 
-(ref:mimicary) This figure recreates Figure 3 in @basole2021 using the `ggplot2` R-package [@ggplot2].
+(ref:mimicary) This figure recreates Figure 3 in @basole2021 using the `ggplot2` R-package [@ggplot2]. The code is displayed above by clicking on the CODE button just above the right corner of this plot.
 
 ```{r mimic-original, fig.height = 8, fig.width = 18, fig.cap = "(ref:mimicary)"}           
 g1 <- df_miss %>% 
@@ -93,7 +106,7 @@ g1 <- df_miss %>%
   geom_point(aes(size = coverage_obscured, color = y), alpha = 0.8) +
   geom_text(aes(label = percent(y/100, 0.01)), nudge_y = -0.1, size = 2.5) +
   labs(color = "Readmission Rate", size = "Coverage") +
-  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$readmission_rate * 100), mid = "#FFFF00") +
+  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$readmission_rate * 100), mid = "#ffffe0") +
   theme_void() +
   geom_text(data = df_full, aes(label = state), color = "black", nudge_y = 0.05) +
   scale_size(range = c(3, 30)) +
@@ -101,14 +114,14 @@ g1 <- df_miss %>%
   theme(plot.margin = margin(r = 30))
 
 g2 <- g1 %+% mutate(df_miss, y = colorectal_cancer_screenings) + 
-  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#FFFF00") +
+  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#ffffe0") +
   labs(color = "Cancer Screening Rate")
 
 g1 + g2 + plot_layout(guides = "collect") 
 ```
 
-(ref:fig3-alt) This is an alternative graph design for [Figure S1](#fig:mimic-original).
-
+(ref:fig3-alt) The above figure show an alternative plot design to display the information in [Figure S1](#fig:mimic-original) and is the same figure as Figure 1 in the main paper. The plot shows a scatter plot of percentage of readmission and coverage on the left and a scatter plot of percentage of cancer screening and coverage on the right. Both plots are superimposed by a local polynomial regression (displayed as a blue line) with confidence interval for the line (displayed in gray). The code is displayed above by clicking on the CODE button just above the right corner of this plot.
+ 
 ```{r fig3-alt, fig.height = 4, fig.width = 8, fig.cap = "(ref:fig3-alt)"}
 theme_set(theme_classic())
 g1 <- ggplot(df_miss, aes(coverage_obscured * 100, readmission_rate * 100)) +
@@ -133,13 +146,13 @@ lineup_data <- null_permute("colorectal_cancer_screenings") %>%
   lineup(true = df_miss, n = 20, pos = 3)
 ```
 
-(ref:lineup-theirs) The lineup for the tile grid plot.
+(ref:lineup-theirs) The above figure shows a lineup for this tile grid plot where one of the plots is made using the data, and the other nineteen plots are constructed after first permuting the percentage of cancer screening across different states with the missing value structure is preserved. Text and legends have been removed to minimise the bias in reading plots due to the reader being aware of the context. **Which plot strikes the most different to you?**  The code is displayed above by clicking on the CODE button just above the right corner of this plot. Try the other lineups before finding the data plot position at the bottom of this document.
 
 ```{r lineup-theirs, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-theirs)"}
 plot_lineup_theirs <- ggplot(lineup_data, aes(col, row)) +
   geom_point(aes(size = coverage_obscured, color = colorectal_cancer_screenings), alpha = 0.8) +
   theme_void() + 
-  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#FFFF00") +
+  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#ffffe0") +
   scale_size(range = c(1, 5)) +
   scale_y_reverse(expand = c(0.1, 0.2))  +
   guides(color = "none", size = "none") + 
@@ -152,7 +165,7 @@ plot_lineup_theirs <- ggplot(lineup_data, aes(col, row)) +
 plot_lineup_theirs
 ```
 
-(ref:lineup-ours) The lineup for the scatter plot.
+(ref:lineup-ours) The above figure shows a lineup for the scatter plot design used in [Figure S2](#fig:fig3-alt). The same data used to create [Figure S3](#fig:lineup-theirs) (including the null data) is used to create this lineup. The code is displayed above by clicking on the CODE button just above the right corner of this plot. When you are ready, find the position of the data plot is revealed at the [bottom of this document](#position).
 
 ```{r lineup-ours, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-ours)"}
 plot_lineup_ours <- ggplot(lineup_data, aes(coverage_obscured * 100, colorectal_cancer_screenings)) +
@@ -186,19 +199,19 @@ lineup_false_data <- null_permute("colorectal_cancer_screenings") %>%
   lineup(true = df_false, n = 20, pos = 5)
 ```
 
-(ref:lineup-theirs-false) Which plot looks the most strikingly different to you?
+(ref:lineup-theirs-false) The above shows a lineup for the tile grid plot design where the data was purposely manipulated to induce a higher association between the variables of interest. Which plot looks the most strikingly different to you? Try the next lineup to see if you can find the data plot before finding the position of the data plot [here](#position).
 
 ```{r lineup-theirs-false, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-theirs-false)"}
 plot_lineup_theirs %+% lineup_false_data
 ```
 
-(ref:lineup-ours-false) The above shows a lineup for data that was purposely manipulated so that two variables have a higher association. How easy was it to spot the data plot compared to [Figure S5](#fig:lineup-theirs-false)?
+(ref:lineup-ours-false) The above shows a lineup for the scatter plot design with the data that was purposely manipulated so that two variables mapped to the $x$-axis and $y$-axis have a higher association. How easy was it to spot the data plot compared to [Figure S5](#fig:lineup-theirs-false)? You can find the code to generate the above lineup plot by collapsing all codes. 
 
 ```{r lineup-ours-false, fig.height = 10, fig.width = 10, fig.cap = "(ref:lineup-ours-false)"}
 plot_lineup_ours %+% lineup_false_data
 ```
 
-# Positions of the data plot
+# Positions of the data plot {#position}
 
 The positions of the data plot for the lineup are as follows:
 
@@ -207,6 +220,7 @@ The positions of the data plot for the lineup are as follows:
 * [Figure S5](#fig:lineup-theirs-false): position 5. 
 * [Figure S6](#fig:lineup-ours-false): position 5. 
 
+We expect that you would have struggled to find the data plto in [Figure S3](#fig:lineup-theirs) and [Figure S4](#fig:lineup-ours) as we do not observe strong association between the cancer screening rate and coverage. Additionally, we expect that most would spot the data plot in [Figure S5](#fig:lineup-theirs-false) and all would spot the data plot in [Figure S6](#fig:lineup-ours-false). For those that spot the data plot in [Figure S5](#fig:lineup-theirs-false), we suspect it took longer than spotting the data plot in [Figure S6](#fig:lineup-ours-false). 
 
 # Acknowledgement 
 
