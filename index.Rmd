@@ -84,31 +84,25 @@ df_miss <- df_full %>%
 ```
 </details>
 
-(ref:mimicary) This figure recreates Figure 3 in @basole2021.
+(ref:mimicary) This figure recreates Figure 3 in @basole2021 using the `ggplot2` R-package [@ggplot2].
 
-```{r mimic-original, fig.height = 8, fig.width = 18, fig.cap = "(ref:mimicary)"}
-g1 <- ggplot(df_miss, aes(col, row)) +
-  geom_point(aes(size = coverage_obscured, color = readmission_rate * 100), alpha = 0.8) +
-  geom_text(data = df_full, aes(label = state), color = "black", nudge_y = 0.05) +
-  geom_text(aes(label = percent(readmission_rate, 0.01)), nudge_y = -0.1, size = 2.5) +
+```{r mimic-original, fig.height = 8, fig.width = 18, fig.cap = "(ref:mimicary)"}           
+g1 <- df_miss %>% 
+  mutate(y = readmission_rate * 100) %>% 
+  ggplot(aes(col, row)) +
+  geom_point(aes(size = coverage_obscured, color = y), alpha = 0.8) +
+  geom_text(aes(label = percent(y/100, 0.01)), nudge_y = -0.1, size = 2.5) +
+  labs(color = "Readmission Rate", size = "Coverage") +
+  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$readmission_rate * 100), mid = "#FFFF00") +
   theme_void() +
-  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$readmission_rate * 100), mid = "#E7D9C6") +
+  geom_text(data = df_full, aes(label = state), color = "black", nudge_y = 0.05) +
   scale_size(range = c(3, 30)) +
   scale_y_reverse() +
-  theme(plot.margin = margin(r = 30)) +
-  labs(color = "Readmission",
-       size = "Coverage")
+  theme(plot.margin = margin(r = 30))
 
-g2 <- ggplot(df_miss, aes(col, row)) +
-  geom_point(aes(size = coverage_obscured, color = colorectal_cancer_screenings), alpha = 0.8) +
-  geom_text(data = df_full, aes(label = state), color = "black", nudge_y = 0.05) +
-  geom_text(aes(label = percent(colorectal_cancer_screenings/100, 0.01)), nudge_y = -0.1, size = 2.5) +
-  theme_void() +
-  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#E7D9C6") +
-  scale_size(range = c(3, 30)) +
-  scale_y_reverse()  +
-  labs(color = "Cancer Screening",
-       size = "Coverage")
+g2 <- g1 %+% mutate(df_miss, y = colorectal_cancer_screenings) + 
+  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#FFFF00") +
+  labs(color = "Cancer Screening Rate")
 
 g1 + g2 + plot_layout(guides = "collect") 
 ```
@@ -145,7 +139,7 @@ lineup_data <- null_permute("colorectal_cancer_screenings") %>%
 plot_lineup_theirs <- ggplot(lineup_data, aes(col, row)) +
   geom_point(aes(size = coverage_obscured, color = colorectal_cancer_screenings), alpha = 0.8) +
   theme_void() + 
-  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#E7D9C6") +
+  scale_color_gradient2(low = "#3F6E9A", high = "#AB4C30", midpoint = median(df_miss$colorectal_cancer_screenings), mid = "#FFFF00") +
   scale_size(range = c(1, 5)) +
   scale_y_reverse(expand = c(0.1, 0.2))  +
   guides(color = "none", size = "none") + 
