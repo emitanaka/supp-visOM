@@ -1,4 +1,4 @@
-# Supplementary material for "Uprooting sub-standard visualisation practices for decision-making in operational management"
+# Supplementary material for "Incorporating statistical thinking into visualisation practices for decision-making in operational management"
 
 This repository contains supplementary materials for the commentary paper found here [FIXME: include link when available]. 
 

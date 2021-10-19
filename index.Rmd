@@ -1,5 +1,5 @@
 ---
-title: "Supplementary material for \"Uprooting sub-standard visualisation practices for decision-making in operational management\""
+title: "Supplementary material for \"Incorporating statistical thinking into visualisation practices for decision-making in operational management\""
 author:
   - name: Emi Tanaka
     affiliation: Department of Econometrics and Business Statistics, Monash University, Melbourne, VIC 3800
@@ -55,10 +55,11 @@ library(scales)
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 knitr::opts_chunk$set(fig.path = "images/",
                       dev = c("png", "pdf", "svg"),
-                      cache = TRUE,
+                      cache = FALSE,
                       cache.path = "cache/",
                       message = FALSE,
                       warning = FALSE)
+options(knitr.duplicate.label = "allow")
 ```
 
 
@@ -240,7 +241,22 @@ sessioninfo::session_info()
 
 
 ```{r copy-for-paper, include = FALSE}
+# this chunk must be the last one
 fs::file_copy("images/fig3-alt-1.pdf", "paper/", overwrite = TRUE)
 fs::file_copy("images/lineup-theirs-1.pdf", "paper/", overwrite = TRUE)
+# extract all the R code 
+knitr::purl("index.Rmd",
+            documentation = 1)
+fs::file_move("index.R", "code/plots.R")
+# remove this chunk and the knitr setup from the output R code
+f <- readLines("code/plots.R")
+i1 <- which(str_detect(f, "^## ----knitr-setup"))
+chunk_indexes <- which(str_detect(f, "^## ----"))
+j1 <- chunk_indexes[chunk_indexes > i1][1] - 1
+  
+i2 <- max(which(str_detect(f, "^## ----copy-for-paper")))
+j2 <- length(f)
+out <- f[-c(i1:j1, i2:j2)]
+writeLines(out, "code/plots.R")
 ```
 
