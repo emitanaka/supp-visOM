@@ -128,13 +128,13 @@ g1 <- ggplot(df_miss, aes(coverage_obscured * 100, readmission_rate * 100)) +
   geom_point() +
   labs(x = "Coverage (%)", y = "Readmission (%)") +
   geom_smooth(method = loess, formula = y ~ x) +
-  annotate("richtext", x = 80, y = 15.3, label.color = NA, fill = "transparent", label = glue::glue("R<sup>2</sup> = {scales::comma(cor(df_miss$coverage_obscured, df_miss$readmission_rate), 0.001)}")) 
+  annotate("richtext", x = 80, y = 15.3, label.color = NA, fill = "transparent", label = glue::glue("R<sup>2</sup> = {scales::comma(cor(df_miss$coverage_obscured, df_miss$readmission_rate)^2, 0.001)}")) 
 
 g2 <- ggplot(df_miss, aes(coverage_obscured * 100, colorectal_cancer_screenings)) +
   geom_point() +
   labs(x = "Coverage (%)", y = "Cancer Screening (%)") +
   geom_smooth(method = loess, formula = y ~ x) +
-  annotate("richtext", x = 80, y = 73, label.color = NA, fill = "transparent", label = glue::glue("R<sup>2</sup> = {scales::comma(cor(df_miss$coverage_obscured, df_miss$colorectal_cancer_screenings), 0.001)}")) 
+  annotate("richtext", x = 80, y = 73, label.color = NA, fill = "transparent", label = glue::glue("R<sup>2</sup> = {scales::comma(cor(df_miss$coverage_obscured, df_miss$colorectal_cancer_screenings)^2, 0.001)}")) 
 
 
 g1 + g2 
@@ -237,3 +237,10 @@ sessioninfo::session_info()
 
   
 <br>
+
+
+```{r copy-for-paper, include = FALSE}
+fs::file_copy("images/fig3-alt-1.pdf", "paper/", overwrite = TRUE)
+fs::file_copy("images/lineup-theirs-1.pdf", "paper/", overwrite = TRUE)
+```
+
